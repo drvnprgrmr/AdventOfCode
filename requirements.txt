@@ -3,7 +3,7 @@ aocd-example-parser==2023.12.2
 beautifulsoup4==4.12.2
 certifi==2024.7.4
 charset-normalizer==3.3.2
-idna==3.6
+idna==3.7
 Pebble==5.0.4
 python-dateutil==2.8.2
 requests==2.33.0
