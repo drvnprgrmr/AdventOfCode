@@ -11,4 +11,4 @@ six==1.16.0
 soupsieve==2.5
 termcolor==2.4.0
 tzlocal==5.2
-urllib3==2.1.0
+urllib3==2.6.3
