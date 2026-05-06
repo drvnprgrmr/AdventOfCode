@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from os import path
-from sys import stderr
 
 from aocd.models import Puzzle
 
@@ -23,6 +22,11 @@ def load_input_data() -> str:
             f.write(input_data)
 
     return input_data
+
+
+def save_anwer(data: str, file_suffix: str):
+    with open(path.join(path.dirname(__file__), f"answer_{file_suffix}.txt"), "w") as f:
+        f.write(data)
 
 
 def solve_a(raw_data: str) -> int:
@@ -87,16 +91,21 @@ if __name__ == "__main__":
     # load parser's arguments
     args = parser.parse_args()
 
-    if not puzzle.answered("a"):
+    if puzzle.answered_a:
+        save_anwer(str(puzzle.answer_a), "a")
+
+        # you can only attempt b if you've answered a
+        if puzzle.answered_b:
+            save_anwer(str(puzzle.answer_b), "b")
+        else:
+            answer_b = solve_b(data)
+            if not args.test:
+                puzzle.answer_b = answer_b
+            else:
+                print(answer_b)
+    else:
         answer_a = solve_a(data)
         if not args.test:
             puzzle.answer_a = answer_a
         else:
             print(answer_a)
-
-    elif not puzzle.answered("b"):
-        answer_b = solve_b(data)
-        if not args.test:
-            puzzle.answer_b = answer_b
-        else:
-            print(answer_b)
