@@ -50,7 +50,35 @@ def solve_a(raw_data: str) -> int:
 
 
 def solve_b(raw_data: str) -> int:
-    return 0
+    visited_positions = set()
+    santa_position = [0, 0]  # x, y
+    robo_santa_position = [0, 0]  # x, y
+
+    # add the starting postion
+    current_position_tuple = tuple(santa_position)
+    visited_positions.add(current_position_tuple)
+
+    current_santa = santa_position
+    for dir in data:
+        if dir == "^":  # up
+            current_santa[1] += 1
+        elif dir == "v":  # down
+            current_santa[1] -= 1
+        elif dir == ">":  # right
+            current_santa[0] += 1
+        elif dir == "<":  # left
+            current_santa[0] -= 1
+
+        # switch santas
+        current_santa = (
+            robo_santa_position if current_santa == santa_position else santa_position
+        )
+
+        # check if position has been visited previously
+        current_position_tuple = (current_santa[0], current_santa[1])
+        visited_positions.add(current_position_tuple)
+
+    return visited_positions.__len__()
 
 
 if __name__ == "__main__":
