@@ -1,4 +1,3 @@
-import token
 from argparse import ArgumentParser
 from os import path
 
