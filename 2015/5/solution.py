@@ -1,3 +1,4 @@
+import token
 from argparse import ArgumentParser
 from os import path
 
@@ -74,8 +75,35 @@ def solve_a(data: str) -> int:
     return nice_string_count
 
 
-def solve_b(data: str) -> str:
-    return ""
+def has_pair_twice(string: str) -> bool:
+    tokens: list[str] = []
+    for i in range(len(string) - 1):
+        tokens.append(string[i] + string[i + 1])
+
+    for p1 in range(len(tokens) - 2):
+        for p2 in range(p1 + 2, len(tokens)):
+            if tokens[p1] == tokens[p2]:
+                return True
+    return False
+
+
+def has_letter_sandwich(string: str) -> bool:
+    for i in range(len(string) - 2):
+        if string[i] == string[i + 2]:
+            return True
+
+    return False
+
+
+def solve_b(data: str) -> int:
+    lines = data.split()
+    nice_string_count = 0
+
+    for line in lines:
+        if has_pair_twice(line) and has_letter_sandwich(line):
+            nice_string_count += 1
+
+    return nice_string_count
 
 
 if __name__ == "__main__":
@@ -99,7 +127,7 @@ if __name__ == "__main__":
                         example_test_answer = str(solve_b(example.input_data))
                         assert example.answer_b == example_test_answer, (
                             "Solution doesn't work for example."
-                            + f"Got {example_test_answer} instead of {example.answer_b}"
+                            + f"\nGot {example_test_answer} instead of {example.answer_b}"
                         )
                 puzzle.answer_b = answer_b
     else:
@@ -113,6 +141,6 @@ if __name__ == "__main__":
                     example_test_answer = str(solve_a(example.input_data))
                     assert example.answer_a == example_test_answer, (
                         "Solution doesn't work for example."
-                        + f"Got {example_test_answer} instead of {example.answer_a}"
+                        + f"\nGot {example_test_answer} instead of {example.answer_a}"
                     )
             puzzle.answer_a = answer_a
