@@ -98,8 +98,56 @@ def solve_a(data: str) -> int:
     return get_on_lights()
 
 
+# ------------------------------------------------
+
+
+def process_instruction_differently(line: str) -> None:
+    # decode string
+    rect_top_left, rect_bottom_right = re.findall(coord_regex, line)[0]
+    if line.startswith("turn on"):
+        execute_updated_action(Action.TURN_ON, rect_top_left, rect_bottom_right)
+    elif line.startswith("turn off"):
+        execute_updated_action(Action.TURN_OFF, rect_top_left, rect_bottom_right)
+    elif line.startswith("toggle"):
+        execute_updated_action(Action.TOGGLE, rect_top_left, rect_bottom_right)
+
+
+def execute_updated_action(action: Action, tl: str, br: str) -> None:
+    top, left = tl.split(",")
+    top, left = int(top), int(left)
+
+    bottom, right = br.split(",")
+    bottom, right = int(bottom), int(right)
+
+    # flip order if rectangle is reversed
+    if top > bottom:
+        top, bottom = bottom, top
+        left, right = right, left
+
+    for i in range(top, bottom + 1):
+        for j in range(left, right + 1):
+            if action == Action.TURN_ON:
+                var_brightness_matrix[i][j] += 1
+            elif action == Action.TURN_OFF and var_brightness_matrix[i][j]:
+                var_brightness_matrix[i][j] -= 1
+            elif action == Action.TOGGLE:
+                var_brightness_matrix[i][j] += 2
+
+
+def get_total_brightness() -> int:
+    total_brightness = 0
+    for i in range(MATRIX_LEN):
+        total_brightness += reduce(lambda x, y: x + y, var_brightness_matrix[i])
+    return total_brightness
+
+
+var_brightness_matrix = [[0 for i in range(MATRIX_LEN)] for j in range(MATRIX_LEN)]
+
+
 def solve_b(data: str) -> int:
-    pass
+    for line in data.splitlines():
+        process_instruction_differently(line)
+    return get_total_brightness()
 
 
 if __name__ == "__main__":
