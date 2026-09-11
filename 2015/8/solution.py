@@ -1,3 +1,4 @@
+import re
 from argparse import ArgumentParser
 from collections import defaultdict
 from enum import Enum
@@ -50,7 +51,12 @@ def solve_a(data: str) -> int:
 
 
 def solve_b(data: str):
-    pass
+    lines = data.splitlines()
+    total_excess = 0
+    pattern = re.compile(r"[\"\\]")
+    for line in lines:
+        total_excess += 2 + len(re.findall(pattern, line))
+    return total_excess
 
 
 # -------------------------------------------------------------
