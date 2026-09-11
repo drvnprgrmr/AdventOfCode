@@ -76,11 +76,16 @@ def solve_a(data: str) -> int:
             elif len(tokens) == 4:  # process the NOT operation
                 left = tokens[1]
                 out = tokens[3]
-                if wire_values[left] == -1:
+
+                if left.isnumeric():
+                    left = int(left)
+                elif wire_values[left] == -1:
                     continue
+                else:
+                    left = wire_values[left]
 
                 # perform operation
-                wire_values[out] = 0xFFFF ^ wire_values[left]
+                wire_values[out] = 0xFFFF ^ left
 
                 # mark line as processed
                 unprocessed_count -= 1
@@ -122,7 +127,6 @@ def solve_a(data: str) -> int:
                 unprocessed_count -= 1
                 processed_lines[i] = True
 
-    pprint(wire_values)
     return wire_values["a"]
 
 
@@ -130,6 +134,19 @@ def solve_a(data: str) -> int:
 
 
 def solve_b(data: str) -> int:
+    # set the value of b to a
+    wire_values["b"] = solve_a(data)
+
+    # reset all other values
+    for key in wire_values.keys():
+        if key != "b":
+            wire_values[key] = -1
+
+    print("Debug")
+    pprint(wire_values)
+
+    # re-solve part a
+    return solve_a(data)
     pass
 
 
